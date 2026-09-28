@@ -2,7 +2,7 @@
 
 ### A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents
 
-**Accepted at NeurIPS 2026.**
+**Poster at NeurIPS 2026 E&D Track.**
 
 **Qiaoyuan Zheng\*, Yiqu Yang\*, Qi Gao\*, Imanol Schlag†**  
 ETH Zurich · ETH AI Center  
@@ -24,7 +24,7 @@ evaluation.
 
 ## News
 
-- **September 2026:** POLAR-Bench was accepted at NeurIPS 2026. This repository is now de-anonymized.
+- **September 2026:** POLAR-Bench was accepted as a poster at NeurIPS 2026 E&D Track. This repository is now de-anonymized.
 
 ## Overview
 
