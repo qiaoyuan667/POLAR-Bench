@@ -15,7 +15,7 @@ It measures protected-attribute privacy and task-required attribute disclosure
 with deterministic scoring. Attribute Utility measures information availability,
 not end-to-end task completion.
 
-[Overview](#overview) · [Installation](#installation) · [Running the Pipeline](#running-the-pipeline) · [Citation](#citation) · [License](#license)
+[Dataset](https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench) · [Evaluate](#evaluate-the-released-benchmark) · [Overview](#overview) · [Running the Pipeline](#running-the-pipeline) · [Citation](#citation) · [License](#license)
 
 This repository contains the source code for POLAR-Bench. The codebase
 provides utilities for benchmark construction, prompt generation, text rendering,
@@ -27,6 +27,11 @@ evaluation.
 - **September 2026:** POLAR-Bench was accepted at NeurIPS 2026. This repository is now de-anonymized.
 
 ## Overview
+
+**To evaluate a model, start with the [released benchmark](#evaluate-the-released-benchmark).
+You do not need to construct, render, verify, repair, or filter data.**
+Hugging Face hosts the final evaluation data; this GitHub repository maintains
+the evaluation code and the optional construction pipeline.
 
 The project is organized around a benchmark construction and evaluation pipeline.
 
@@ -60,6 +65,62 @@ pip install notebook
 The code has been tested with Python 3.10+. Some scripts may require additional
 dependencies depending on the model APIs, benchmark files, or rendering backend
 used in the experiments.
+
+## Evaluate the Released Benchmark
+
+Download the final benchmark from
+[Qiaoyuan/POLAR-Bench](https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench).
+The JSON is ready for the evaluator and contains all 7,852 instances. No data
+preparation pipeline is required.
+
+```bash
+# Skip downloading construction-stage LFS data when cloning the code.
+GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/qiaoyuan667/POLAR-Bench.git
+cd POLAR-Bench
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt huggingface_hub
+
+# Download only the final evaluator input into the expected data/ path.
+hf download Qiaoyuan/POLAR-Bench \
+  data/privacy_benchmark_rendered_repaired.json \
+  --repo-type dataset --local-dir .
+```
+
+Configure an OpenAI-compatible endpoint serving the trusted model and external
+attacker. Replace the placeholders below with your available model IDs and
+endpoint. `ANonymous_SERVING_API` is the existing case-sensitive environment
+variable used by the released evaluator; it is not an authorship label.
+
+```bash
+export ANonymous_SERVING_API="YOUR_API_KEY"
+export POLAR_BASE_URL="https://YOUR_ENDPOINT/v1"
+export POLAR_MODEL_A="YOUR_TRUSTED_MODEL_ID"
+export POLAR_MODEL_B="meta-llama/Llama-3.3-70B-Instruct"
+
+# Smoke test: two instances per domain. Model calls may incur API charges.
+python scripts/ab_eval.py \
+  --dataset data/privacy_benchmark_rendered_repaired.json \
+  --model-a "${POLAR_MODEL_A}" \
+  --domains medical recruitment finance education customer_support legal insurance housing travel cybersecurity \
+  --samples-per-domain 2 \
+  --max-rounds 6 \
+  --seed 42 \
+  --output results/smoke_summary.json \
+  --output-details results/smoke_details.json \
+  --checkpoint results/smoke_checkpoint.json \
+  --Anonymous-base-url "${POLAR_BASE_URL}" \
+  --model-b "${POLAR_MODEL_B}" \
+  --max-workers 5 \
+  --model-a-provider Anonymous \
+  --defense none
+```
+
+For the full benchmark, change `--samples-per-domain 2` to
+`--samples-per-domain 0` and use new `full_*` output/checkpoint paths.
+To resume an interrupted run, repeat its original command with the same
+configuration and checkpoint. Models must be running and accessible; downloading
+the dataset does not launch model services. Never commit API keys.
 
 ## Source Files
 
@@ -117,7 +178,9 @@ analysis.
 
 ## Running the Pipeline
 
-A typical workflow and examples usages are shown below.
+The following construction workflow is optional and intended for rebuilding or
+extending the benchmark. For evaluation of the published dataset, skip steps 1–4
+and use the [ready-to-evaluate quick start](#evaluate-the-released-benchmark).
 
 ```bash
 # 1. Build or inspect benchmark data (you can do it step by step)
