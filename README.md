@@ -34,7 +34,7 @@ adversarial interaction?
 | :---: | :---: | :---: | :---: |
 | **7,852** | **10** | **5 × 5** | **22** |
 
-**[Paper](https://arxiv.org/abs/2605.19127) · [Results](#key-results) · [Quick start](#evaluate-the-released-benchmark) · [Connect your models](docs/model-setup.md) · [Benchmark details](docs/benchmark.md) · [Citation](#citation)**
+**[Project website](https://qiaoyuan-zheng.com/POLAR-Bench/) · [Paper](https://arxiv.org/abs/2605.19127) · [Results](#key-results) · [Quick start](#evaluate-the-released-benchmark) · [Connect your models](docs/model-setup.md) · [Benchmark details](docs/benchmark.md) · [Citation](#citation)**
 
 > **News · September 2026:** POLAR-Bench was accepted as a poster at NeurIPS 2026 E&D Track. The code and ready-to-evaluate dataset are publicly available under the authors' names.
 

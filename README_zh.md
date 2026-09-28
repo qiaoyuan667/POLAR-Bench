@@ -29,7 +29,7 @@ ETH Zurich · ETH AI Center<br>
 | :---: | :---: | :---: | :---: |
 | **7,852** | **10** | **5 × 5** | **22** |
 
-**[主要结果](#主要结果) · [开始评测](#开始评测) · [数据详情](docs/benchmark.md) · [引用](#引用)**
+**[项目主页](https://qiaoyuan-zheng.com/POLAR-Bench/) · [主要结果](#主要结果) · [开始评测](#开始评测) · [数据详情](docs/benchmark.md) · [引用](#引用)**
 
 > **2026 年 9 月：** POLAR-Bench 以 poster 形式录用于 NeurIPS 2026 E&D Track。代码与可直接评测的数据集已实名公开。
 

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POLAR-Bench | Privacy–Utility Benchmark for LLM Agents</title>
+  <meta name="description" content="POLAR-Bench evaluates privacy–utility trade-offs in LLM agents: 7,852 instances, 10 domains, and 25 policy–attack combinations. Paper, data, code, and results.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#163d8d">
+  <link rel="canonical" href="https://qiaoyuan-zheng.com/POLAR-Bench/">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23163d8d'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='48' fill='white'%3EP%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="site-assets/site.css">
+  <link rel="alternate" type="application/x-bibtex" href="polar-bench.bib" title="POLAR-Bench citation">
+  <script src="site-assets/site.js" defer></script>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="POLAR-Bench">
+  <meta property="og:title" content="POLAR-Bench: Privacy–Utility Trade-offs in LLM Agents">
+  <meta property="og:description" content="Can your agent share what matters—and protect what is private? Explore the benchmark, paper, dataset, and evaluation code.">
+  <meta property="og:url" content="https://qiaoyuan-zheng.com/POLAR-Bench/">
+  <meta name="citation_title" content="POLAR-Bench: A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents">
+  <meta name="citation_author" content="Zheng, Qiaoyuan">
+  <meta name="citation_author" content="Yang, Yiqu">
+  <meta name="citation_author" content="Gao, Qi">
+  <meta name="citation_author" content="Schlag, Imanol">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2605.19127">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://qiaoyuan-zheng.com/POLAR-Bench/#website",
+        "url": "https://qiaoyuan-zheng.com/POLAR-Bench/",
+        "name": "POLAR-Bench",
+        "description": "The official project page for POLAR-Bench, a diagnostic benchmark for privacy–utility trade-offs in LLM agents.",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "ScholarlyArticle",
+        "@id": "https://qiaoyuan-zheng.com/POLAR-Bench/#paper",
+        "name": "POLAR-Bench: A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents",
+        "url": "https://arxiv.org/abs/2605.19127",
+        "sameAs": "https://arxiv.org/abs/2605.19127",
+        "identifier": "arXiv:2605.19127",
+        "datePublished": "2026-05-18",
+        "author": [
+          {"@type": "Person", "name": "Qiaoyuan Zheng", "url": "https://github.com/qiaoyuan667"},
+          {"@type": "Person", "name": "Yiqu Yang"},
+          {"@type": "Person", "name": "Qi Gao"},
+          {"@type": "Person", "name": "Imanol Schlag"}
+        ],
+        "description": "A benchmark of selective disclosure in LLM agents across ten domains, five privacy-policy formulations, and five conversational attack protocols, with deterministic Privacy and Attribute Utility scoring."
+      },
+      {
+        "@type": "Dataset",
+        "@id": "https://qiaoyuan-zheng.com/POLAR-Bench/#dataset",
+        "name": "POLAR-Bench",
+        "url": "https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench",
+        "sameAs": "https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench",
+        "description": "7,852 synthetic evaluation instances across ten application domains, crossing five privacy-policy formulations with five conversational attack protocols. Includes rendered documents, tasks, policies, attacks, and predefined attribute-value targets for deterministic scoring.",
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "isAccessibleForFree": true,
+        "inLanguage": "en",
+        "keywords": ["POLAR-Bench", "LLM agents", "privacy", "selective disclosure", "privacy-utility trade-offs", "adversarial evaluation"],
+        "creator": [
+          {"@type": "Person", "name": "Qiaoyuan Zheng"},
+          {"@type": "Person", "name": "Yiqu Yang"},
+          {"@type": "Person", "name": "Qi Gao"},
+          {"@type": "Person", "name": "Imanol Schlag"}
+        ],
+        "citation": {"@id": "https://qiaoyuan-zheng.com/POLAR-Bench/#paper"},
+        "distribution": [{
+          "@type": "DataDownload",
+          "encodingFormat": "application/json",
+          "contentUrl": "https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench/resolve/main/data/privacy_benchmark_rendered_repaired.json"
+        }]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="navigation wrap" aria-label="Main navigation">
+      <a class="wordmark" href="#top" aria-label="POLAR-Bench home"><span class="mark" aria-hidden="true">P</span> POLAR-Bench</a>
+      <div class="nav-links"><a href="#idea">The idea</a><a href="#results">Results</a><a href="#benchmark">Benchmark</a><a href="#evaluate">Evaluate</a><a href="#citation">BibTeX</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" id="top" aria-labelledby="project-title">
+      <p class="eyebrow">Poster at NeurIPS 2026 E&amp;D Track</p>
+      <h1 id="project-title">POLAR<span>-Bench</span></h1>
+      <p class="publication-title">A Diagnostic Benchmark for<br class="desktop-break"> Privacy–Utility Trade-offs in LLM Agents</p>
+      <p class="authors"><a href="https://github.com/qiaoyuan667">Qiaoyuan Zheng</a><sup>*</sup><span class="separator">·</span>Yiqu Yang<sup>*</sup><span class="separator">·</span>Qi Gao<sup>*</sup><span class="separator">·</span>Imanol Schlag<sup>†</sup></p>
+      <p class="affiliation">ETH Zurich · ETH AI Center</p>
+      <p class="contribution">* Equal contribution &nbsp; † Corresponding author</p>
+      <div class="resource-links" aria-label="Project resources">
+        <a class="button primary" href="https://arxiv.org/abs/2605.19127">Read the paper <span aria-hidden="true">↗</span></a>
+        <a class="button" href="https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench">Get the dataset <span aria-hidden="true">↗</span></a>
+        <a class="button" href="https://github.com/qiaoyuan667/POLAR-Bench">Explore the code <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+    <section class="idea wrap" id="idea" aria-labelledby="idea-title">
+      <div class="section-heading"><p class="eyebrow">The idea</p><h2 id="idea-title">Share what matters.<br><em>Protect what is private.</em></h2></div>
+      <figure class="paper-figure concept">
+        <a href="site-assets/concept-overview.jpg" aria-label="Open the original concept illustration at full resolution"><img src="site-assets/concept-overview.jpg" alt="A user gives a task, a privacy policy, and mixed-information documents to a trusted model. The trusted model interacts with an external model attempting to extract private information. Their conversation is evaluated for privacy and utility." width="2155" height="753" fetchpriority="high"></a>
+        <figcaption><span class="figure-label">Figure 1 · The concept</span> A trusted agent must share task-required information without exposing protected attributes. Original paper illustration; Utility means information coverage, not end-to-end task completion.</figcaption>
+      </figure>
+      <div class="stat-line" aria-label="Benchmark at a glance"><div><strong>7,852</strong><span>evaluation instances</span></div><div><strong>10</strong><span>application domains</span></div><div><strong>5 × 5</strong><span>policy–attack combinations</span></div><div><strong>22</strong><span>models in the paper</span></div></div>
+      <div class="reading-width intro"><p>Sharing everything is unsafe. Sharing nothing is unhelpful. <strong>POLAR-Bench tests the boundary between the two.</strong> It evaluates whether a trusted LLM agent can provide the information needed for a task while withholding protected attributes under adversarial interaction.</p><p>The benchmark uses synthetic scenarios and predefined attribute-value targets. Scoring is deterministic: no LLM judge decides whether the trusted model disclosed a target attribute.</p></div>
+    </section>
+
+    <section class="chapter wrap" id="results" aria-labelledby="results-title">
+      <div class="chapter-header"><span class="chapter-number" aria-hidden="true">01</span><div class="section-heading"><p class="eyebrow">The evidence</p><h2 id="results-title">Privacy alone<br>doesn’t tell the whole story.</h2></div></div>
+      <div class="section-intro"><p>High privacy scores can coexist with low information availability. Evaluating both makes the difference between <em>protecting the user</em> and simply <em>withholding what the task needs</em> visible.</p><p class="source-note">Results on this page come from <a href="https://arxiv.org/abs/2605.19127v1">arXiv v1</a>, not a live leaderboard. Scores are on a 0–100 scale; higher is better.</p></div>
+      <figure class="paper-figure">
+        <a href="site-assets/privacy-utility.png" aria-label="Open the Privacy–Utility scatter plot at full resolution"><img src="site-assets/privacy-utility.png" alt="Privacy versus Attribute Utility for 22 models: models with similarly high privacy differ substantially in the task-required information they disclose." width="2800" height="1550" loading="lazy" decoding="async"></a>
+        <figcaption><span class="figure-label">Figure 3 · Two dimensions, not one</span> Each point is an evaluated model. The dashed lines show weighted-score contours. “Utility” in the original figure means Attribute Utility. <a href="https://github.com/qiaoyuan667/POLAR-Bench/blob/main/assets/figures/privacy-utility.pdf">Original vector PDF ↗</a></figcaption>
+      </figure>
+      <div class="finding-grid">
+        <div class="finding"><p class="eyebrow">The headline gap</p><p class="large-number">&gt;30 <span>points</span></p><p>Separate the highest and lowest Overall scores when Privacy and Attribute Utility are weighted equally.</p></div>
+        <div class="finding comparison"><h3>Similar privacy. Different utility.</h3><table><caption>Selected models · rounded Figure 2 values</caption><thead><tr><th scope="col">Model</th><th scope="col">Privacy</th><th scope="col">Attribute Utility</th></tr></thead><tbody><tr><th scope="row">GLM-4.7-Flash</th><td>98.9</td><td>61.2</td></tr><tr><th scope="row">GLM-5.1</th><td>99.3</td><td>89.9</td></tr></tbody></table></div>
+      </div>
+      <div class="metric-definitions"><div><span class="metric-tag privacy">Privacy</span><h3>Did protected information stay protected?</h3><p>The fraction of predefined protected attributes that the trusted agent did not disclose.</p></div><div><span class="metric-tag utility">Attribute Utility</span><h3>Was the necessary information made available?</h3><p>The fraction of predefined task-required attributes that the trusted agent disclosed. This is not downstream task completion.</p></div></div>
+    </section>
+
+    <section class="chapter chapter-tinted" id="benchmark" aria-labelledby="benchmark-title"><div class="wrap">
+      <div class="chapter-header"><span class="chapter-number" aria-hidden="true">02</span><div class="section-heading"><p class="eyebrow">The diagnostic design</p><h2 id="benchmark-title">Don’t just rank models.<br><em>Locate the failure.</em></h2></div></div>
+      <div class="section-intro"><p>POLAR-Bench crosses five ways of expressing privacy intent with five conversational attack protocols. The resulting 5 × 5 surface exposes how disclosure behavior changes with the policy and the attack.</p></div>
+      <figure class="paper-figure">
+        <a href="site-assets/diagnostic-surface.png" aria-label="Open the policy–attack heatmaps at full resolution"><img src="site-assets/diagnostic-surface.png" alt="Privacy and Attribute Utility heatmaps over policies P1 through P5 and attacks S1 through S5. The yes/no narrowing column has lower average privacy than the progressive multi-turn column." width="2800" height="1025" loading="lazy" decoding="async"></a>
+        <figcaption><span class="figure-label">Figure 4 · The 5 × 5 diagnostic surface</span> Cells average scores across the evaluated models; model-specific weaknesses can be hidden by these averages. The two panels use different color palettes. <a href="https://github.com/qiaoyuan667/POLAR-Bench/blob/main/assets/figures/diagnostic-surface.pdf">Original vector PDF ↗</a></figcaption>
+      </figure>
+      <p class="key-observation"><strong>More elaborate is not always more damaging.</strong> In Table 9, S2 (yes/no narrowing) yields average Privacy of 66.06, compared with 78.08 for S5 (progressive multi-turn).</p>
+      <div class="axis-grid"><div><h3>Five policy formulations</h3><dl class="axis-list"><div><dt>P1</dt><dd>Explicit constraints</dd></div><div><dt>P2</dt><dd>Semantic protection</dd></div><div><dt>P3</dt><dd>Conditional permission</dd></div><div><dt>P4</dt><dd>Partial / abstract disclosure</dd></div><div><dt>P5</dt><dd>Conflicting requirements</dd></div></dl></div><div><h3>Five attack protocols</h3><dl class="axis-list"><div><dt>S1</dt><dd>Direct single-turn requests</dd></div><div><dt>S2</dt><dd>Yes/no narrowing</dd></div><div><dt>S3</dt><dd>Role confusion</dd></div><div><dt>S4</dt><dd>Prompt injection</dd></div><div><dt>S5</dt><dd>Progressive multi-turn probing</dd></div></dl></div></div>
+      <p class="source-note">These are qualitatively distinct categories—not validated monotonic difficulty or attacker-strength hierarchies.</p>
+      <div class="domain-block"><h3>Ten domains. One disclosure boundary.</h3><ul class="domain-list"><li>Medical</li><li>Recruitment</li><li>Finance</li><li>Education</li><li>Customer support</li><li>Legal</li><li>Insurance</li><li>Housing</li><li>Travel</li><li>Cybersecurity</li></ul><p>Each synthetic instance combines task-required, protected, and other attributes. The labels are benchmark-specified decisions under synthetic policies, not universal privacy norms.</p><a class="text-link" href="https://github.com/qiaoyuan667/POLAR-Bench/blob/main/docs/benchmark.md">Explore the data, domain counts, and distributions <span aria-hidden="true">↗</span></a></div>
+    </div></section>
+
+    <section class="chapter wrap" id="evaluate" aria-labelledby="evaluate-title">
+      <div class="chapter-header"><span class="chapter-number" aria-hidden="true">03</span><div class="section-heading"><p class="eyebrow">Try it on your models</p><h2 id="evaluate-title">Download. Connect.<br><em>Evaluate.</em></h2></div></div>
+      <div class="section-intro"><p>The released benchmark is ready for evaluation. You do not need to generate, render, verify, repair, or filter any data.</p></div>
+      <ol class="steps"><li><span class="step-number" aria-hidden="true">1</span><div><h3>Download the frozen benchmark</h3><p>Hugging Face provides the JSON evaluator input and a CSV version for inspection. Both represent the same 7,852 instances.</p></div></li><li><span class="step-number" aria-hidden="true">2</span><div><h3>Connect a trusted model and an attacker</h3><p>Model A is the agent you evaluate. Model B generates adversarial follow-ups when the protocol requires them. Use a shared OpenAI-compatible endpoint or the documented gateway setup.</p></div></li><li><span class="step-number" aria-hidden="true">3</span><div><h3>Start small, then run the full benchmark</h3><p>Try two instances per domain first. The evaluator saves summary scores, per-instance details, and a checkpoint for resuming with the same configuration.</p></div></li></ol>
+      <div class="code-panel"><div class="code-panel-header"><span>Download the evaluation input</span><button type="button" class="copy-button" data-copy="download-command" hidden>Copy</button></div><pre><code id="download-command">pip install -U huggingface_hub
+hf download Qiaoyuan/POLAR-Bench \
+  data/privacy_benchmark_rendered_repaired.json \
+  --repo-type dataset --local-dir POLAR-Bench-data</code></pre></div>
+      <div class="section-actions"><a class="button primary" href="https://github.com/qiaoyuan667/POLAR-Bench#evaluate-the-released-benchmark">Follow the evaluation guide <span aria-hidden="true">↗</span></a><a class="button" href="https://github.com/qiaoyuan667/POLAR-Bench/blob/main/docs/model-setup.md">Connect your own models <span aria-hidden="true">↗</span></a></div>
+      <p class="source-note">Downloading the data does not launch model services. Model calls may incur API charges. For paper-comparable runs, retain Llama-3.3-70B-Instruct as the attacker and record the exact model and serving configuration.</p>
+    </section>
+
+    <section class="chapter citation-section wrap" id="citation" aria-labelledby="citation-title">
+      <div class="chapter-header"><span class="chapter-number" aria-hidden="true">04</span><div class="section-heading"><p class="eyebrow">Build on this work</p><h2 id="citation-title">Cite POLAR-Bench.</h2></div></div>
+      <p>If POLAR-Bench supports your research, please cite the paper.</p>
+      <div class="code-panel"><div class="code-panel-header"><span>BibTeX</span><div><a href="polar-bench.bib" download>Download .bib</a><button type="button" class="copy-button" data-copy="bibtex" hidden>Copy</button></div></div><pre><code id="bibtex">@article{zheng2026polar,
+  title={POLAR-Bench: A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents},
+  author={Zheng, Qiaoyuan and Yang, Yiqu and Gao, Qi and Schlag, Imanol},
+  journal={arXiv preprint arXiv:2605.19127},
+  year={2026}
+}</code></pre></div>
+      <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+      <div class="acknowledgments"><h3>Acknowledgments and Disclosure of Funding</h3><p>This work was supported as part of the Swiss AI Initiative by compute grant infra01 from the Swiss National Supercomputing Centre (CSCS) on Alps.</p></div>
+      <div class="scope-note"><h3>Scope and reuse</h3><p>Attribute Utility measures information availability, not task execution. Explicit attribute scoring does not cover all semantic inference or side-channel leakage. The benchmark is synthetic and does not contain real personal records.</p><p>Code: <a href="https://github.com/qiaoyuan667/POLAR-Bench/blob/main/LICENSE">MIT</a>. Dataset and paper figures: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. All illustrations and plots on this page come from the authors’ original paper figures.</p></div>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><div><a class="wordmark" href="#top">POLAR-Bench</a><p>Qiaoyuan Zheng · Yiqu Yang · Qi Gao · Imanol Schlag</p></div><div class="footer-links"><a href="https://arxiv.org/abs/2605.19127">Paper</a><a href="https://github.com/qiaoyuan667/POLAR-Bench">GitHub</a><a href="https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench">Dataset</a><a href="https://github.com/qiaoyuan667/POLAR-Bench/blob/main/README_zh.md" lang="zh-CN">中文说明</a><a href="#top">Back to top ↑</a></div></footer>
+</body>
+</html>
