@@ -330,6 +330,10 @@ Copyright (c) 2026 Qiaoyuan Zheng, Yiqu Yang, Qi Gao, and Imanol Schlag.
 
 The dataset is synthetically generated and does not contain real personal data.
 
+## Acknowledgments and Disclosure of Funding
+
+This work was supported as part of the Swiss AI Initiative by compute grant infra01 from the Swiss National Supercomputing Centre (CSCS) on Alps.
+
 ## Citation
 
 If you use POLAR-Bench, please cite:
