@@ -258,12 +258,11 @@ The dataset is synthetically generated and does not contain real personal data.
 If you use POLAR-Bench, please cite:
 
 ```bibtex
-@inproceedings{zheng2026polarbench,
+@article{zheng2026polar,
   title = {POLAR-Bench: A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents},
   author = {Zheng, Qiaoyuan and Yang, Yiqu and Gao, Qi and Schlag, Imanol},
-  booktitle = {Advances in Neural Information Processing Systems},
-  year = {2026},
-  url = {https://github.com/qiaoyuan667/POLAR-Bench}
+  journal = {arXiv preprint arXiv:2605.19127},
+  year = {2026}
 }
 ```
 
