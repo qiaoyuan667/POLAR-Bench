@@ -1,0 +1,18 @@
+# Optional gateway for separate OpenAI-compatible model endpoints.
+# Keep secrets in the gateway environment, never in this file.
+# model_name is the ID passed to POLAR-Bench.
+# litellm_params.model uses openai/ followed by the backend's actual served ID.
+model_list:
+  - model_name: trusted-agent
+    litellm_params:
+      model: openai/trusted-agent
+      api_base: os.environ/POLAR_A_BACKEND_URL
+      api_key: os.environ/POLAR_A_BACKEND_KEY
+  - model_name: attacker-agent
+    litellm_params:
+      model: openai/attacker-agent
+      api_base: os.environ/POLAR_B_BACKEND_URL
+      api_key: os.environ/POLAR_B_BACKEND_KEY
+
+general_settings:
+  master_key: os.environ/POLAR_API_KEY

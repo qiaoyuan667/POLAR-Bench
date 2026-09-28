@@ -15,7 +15,7 @@ It measures protected-attribute privacy and task-required attribute disclosure
 with deterministic scoring. Attribute Utility measures information availability,
 not end-to-end task completion.
 
-[Dataset](https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench) · [Evaluate](#evaluate-the-released-benchmark) · [Overview](#overview) · [Running the Pipeline](#running-the-pipeline) · [Citation](#citation) · [License](#license)
+[Dataset](https://huggingface.co/datasets/Qiaoyuan/POLAR-Bench) · [Evaluate](#evaluate-the-released-benchmark) · [Connect your models](docs/model-setup.md) · [Overview](#overview) · [Running the Pipeline](#running-the-pipeline) · [Citation](#citation) · [License](#license)
 
 This repository contains the source code for POLAR-Bench. The codebase
 provides utilities for benchmark construction, prompt generation, text rendering,
@@ -73,6 +73,11 @@ Download the final benchmark from
 The JSON is ready for the evaluator and contains all 7,852 instances. No data
 preparation pipeline is required.
 
+**New to model serving? Read [Connect your own Model A and Model B](docs/model-setup.md).**
+It covers existing platforms, vLLM/SGLang deployments, separate backends behind
+a gateway, credentials, exact served model IDs, connectivity tests, and troubleshooting.
+Model A is the trusted agent being evaluated; Model B is the external attacker.
+
 ```bash
 # Skip downloading construction-stage LFS data when cloning the code.
 GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/qiaoyuan667/POLAR-Bench.git
@@ -93,6 +98,11 @@ endpoint. `POLAR_API_KEY` is the access key for that service; `POLAR_BASE_URL`
 is its OpenAI-compatible API URL. For the Swiss AI Platform used in our
 experiments, the URL is `https://api.swissai.svc.cscs.ch/v1`. Other compatible
 services can also be used. Both model IDs must be available at the chosen endpoint.
+
+For self-hosted models, use `openai-compatible` regardless of the model's vendor.
+The current evaluator shares one endpoint/key between A and B. If your models
+have separate endpoints or keys, use the [gateway setup](docs/model-setup.md#4-separate-self-hosted-endpoints).
+The guide also shows how to test **both** routes before starting evaluation.
 
 ```bash
 export POLAR_API_KEY="YOUR_API_KEY"
