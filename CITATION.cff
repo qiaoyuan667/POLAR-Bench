@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use POLAR-Bench, please cite the paper listed in README.md."
+title: "POLAR-Bench: A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents"
+type: software
+authors:
+  - family-names: Zheng
+    given-names: Qiaoyuan
+    affiliation: ETH Zurich
+  - family-names: Yang
+    given-names: Yiqu
+    affiliation: ETH Zurich
+  - family-names: Gao
+    given-names: Qi
+    affiliation: ETH Zurich
+  - family-names: Schlag
+    given-names: Imanol
+    affiliation: ETH AI Center
+repository-code: "https://github.com/qiaoyuan667/POLAR-Bench"
+url: "https://github.com/qiaoyuan667/POLAR-Bench"
+license: MIT

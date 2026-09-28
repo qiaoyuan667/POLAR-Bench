@@ -1,14 +1,30 @@
-# Anonymous Code Release
+# POLAR-Bench
 
-This repository contains the source code for the submitted paper. The codebase
+### A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents
+
+**Accepted at NeurIPS 2026.**
+
+**Qiaoyuan Zheng\*, Yiqu Yang\*, Qi Gao\*, Imanol Schlag†**  
+ETH Zurich · ETH AI Center  
+\* Equal contribution. † Corresponding author.
+
+Can an LLM agent share what is needed while protecting what is private?
+POLAR-Bench evaluates selective disclosure under adversarial interaction across
+**10 domains, 7,852 instances, five policy formulations, and five attack protocols**.
+It measures protected-attribute privacy and task-required attribute disclosure
+with deterministic scoring. Attribute Utility measures information availability,
+not end-to-end task completion.
+
+[Overview](#overview) · [Installation](#installation) · [Running the Pipeline](#running-the-pipeline) · [Citation](#citation) · [License](#license)
+
+This repository contains the source code for POLAR-Bench. The codebase
 provides utilities for benchmark construction, prompt generation, text rendering,
 rendered-text verification, sample filtering, result post-processing, and
 evaluation.
 
-This release accompanies a double-blind submission and is provided for reviewer
-inspection of the code-level claims. Author names, affiliations, project-specific
-identifiers, and other potentially identifying information have been removed for
-anonymous review.
+## News
+
+- **September 2026:** POLAR-Bench was accepted at NeurIPS 2026. This repository is now de-anonymized.
 
 ## Overview
 
@@ -169,7 +185,7 @@ The reproducibility of structured data is deterministic as mentioned in the pape
 
 ## Data and Artifacts
 
-Some files such as evaluation results, model output transcripts may not be included in this anonymized release.
+Some artifacts, such as evaluation results and model-output transcripts, may not be included in this repository.
 
 ## Expected Inputs and Outputs
 
@@ -194,17 +210,14 @@ Output files:
 
 Generated outputs are typically written to `outputs/` or `results/`.
 
-## Notes for Anonymous Review
+## Data Provenance and Compatibility
 
-This repository is prepared for double-blind review. We have removed author
-names, institutional information, private paths, personal identifiers, and other
-identifying metadata where possible.
+Benchmark records are synthetically generated. Realistic names and personal
+details are fictional scenario content, not information about the authors.
 
-All the data generated are completely synthetic/fake/artificial, they have totally no relation with the author, any use of a real-world-like (but still artificial) data is in order to augment the validity of the scenario and to expand the benchmark's range of applications as much as possible. Please do not attempt to identify the authors from these artificial data (which is impossible). 
-
-Please do not attempt to identify the authors from code metadata, local paths,
-comments, file history, or external resources. Any remaining identifying
-information should be considered accidental.
+Legacy provider identifiers such as `Anonymous` and `--Anonymous-base-url`
+remain in the code for compatibility with existing evaluation commands. They
+are API configuration names, not an indication that the project is anonymous.
 
 ## Troubleshooting
 
@@ -236,11 +249,22 @@ $env:PYTHONPATH = (Get-Location)
 - Code: MIT License
 - Dataset: Creative Commons Attribution 4.0 International License (CC BY 4.0)
 
-Copyright (c) 2026 Anonymous Authors.
+Copyright (c) 2026 Qiaoyuan Zheng, Yiqu Yang, Qi Gao, and Imanol Schlag.
 
 The dataset is synthetically generated and does not contain real personal data.
 
 ## Citation
 
-If you use Anonymous-Bench, please cite:
-Anonymous atm
+If you use POLAR-Bench, please cite:
+
+```bibtex
+@inproceedings{zheng2026polarbench,
+  title = {POLAR-Bench: A Diagnostic Benchmark for Privacy-Utility Trade-offs in LLM Agents},
+  author = {Zheng, Qiaoyuan and Yang, Yiqu and Gao, Qi and Schlag, Imanol},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year = {2026},
+  url = {https://github.com/qiaoyuan667/POLAR-Bench}
+}
+```
+
+For questions and reproducibility reports, please open a GitHub issue.
