@@ -38,11 +38,11 @@ adversarial interaction?
 
 > **News · September 2026:** POLAR-Bench was accepted as a poster at NeurIPS 2026 E&D Track. The code and ready-to-evaluate dataset are publicly available under the authors' names.
 
-## How it works
+## The idea at a glance
 
-[![POLAR-Bench pipeline: structured attributes and policy/attack axes produce inputs for a trusted model and an external model; their interaction is scored for privacy and utility.](assets/figures/pipeline.png)](assets/figures/pipeline.pdf)
+[![POLAR-Bench concept: a user delegates a task and privacy policy to a trusted agent, which must share task-relevant information while protecting private information during conversation with an external model.](assets/figures/concept-overview.jpg)](assets/figures/concept-overview.jpg)
 
-*Original method diagram from the paper, Figure 9. [Full-resolution image](assets/figures/pipeline.png) · [Original PDF](assets/figures/pipeline.pdf).*
+*Conceptual overview from the paper, Figure 1. [Original full-resolution image](assets/figures/concept-overview.jpg). Utility is task-required information coverage, as defined below.*
 
 1. **Specify what may be shared.** A synthetic source document mixes task-required,
    protected, and other attributes. A task and a privacy policy define the
@@ -60,6 +60,8 @@ end-to-end task success. Higher is better for both. Policies and attacks are
 qualitatively distinct categories, not validated monotonic difficulty levels.
 
 [Explore the policy/attack axes, domain coverage, and data distributions →](docs/benchmark.md)
+
+[See the detailed construction pipeline →](docs/pipeline.md#pipeline-overview)
 
 ## Key results
 

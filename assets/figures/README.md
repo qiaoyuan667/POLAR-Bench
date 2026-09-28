@@ -7,11 +7,17 @@ new experiments, or redrawn approximations**.
 
 | Published asset | Paper figure | Original LaTeX source filename |
 | --- | --- | --- |
+| [concept-overview.jpg](concept-overview.jpg) | Figure 1: conceptual overview | `outline_more_wide.jpg` |
 | [pipeline.png](pipeline.png) / [PDF](pipeline.pdf) | Figure 9: benchmark pipeline | `simple_benchmark_pipeline.pdf` |
 | [privacy-utility.png](privacy-utility.png) / [PDF](privacy-utility.pdf) | Figure 3: Privacy–Utility scatter | `pareto_scatter_multilambda.pdf` |
 | [diagnostic-surface.png](diagnostic-surface.png) / [PDF](diagnostic-surface.pdf) | Figure 4: policy–attack surfaces | `average_privacy_utility_surfaces_high_contrast.pdf` |
 | [word-counts.png](word-counts.png) / [PDF](word-counts.pdf) | Figure 6: text lengths | `word_count_raincloud_camera_ready.pdf` |
 | [attribute-counts.png](attribute-counts.png) / [PDF](attribute-counts.pdf) | Figure 7: attribute composition | `attribute_distribution_panel.pdf` |
+
+The concept illustration is an unchanged **2,155 × 753 pixel JPEG** copied from
+the paper's original figure source, not an enlarged screenshot. Its original
+conceptual wording is retained; the README clarifies that the implemented
+Attribute Utility metric is information coverage, not end-to-end task success.
 
 PDFs are unchanged copies of the LaTeX figure files. PNG previews are rendered
 directly from those PDFs with Poppler at **2,800 pixels on the longest edge**,

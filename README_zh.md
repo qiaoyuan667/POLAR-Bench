@@ -33,11 +33,11 @@ ETH Zurich · ETH AI Center<br>
 
 > **2026 年 9 月：** POLAR-Bench 以 poster 形式录用于 NeurIPS 2026 E&D Track。代码与可直接评测的数据集已实名公开。
 
-## 如何工作
+## 一图理解核心思路
 
-[![论文原始方法图：从结构化属性、政策与攻击设定构建样本，可信模型和外部模型进行交互，再评测隐私与效用。](assets/figures/pipeline.png)](assets/figures/pipeline.pdf)
+[![POLAR-Bench 概念示意图：用户将任务与隐私政策交给可信智能体；它需要在与外部模型对话时分享任务相关信息，同时保护私密信息。](assets/figures/concept-overview.jpg)](assets/figures/concept-overview.jpg)
 
-*论文 Figure 9 原图。[高清图片](assets/figures/pipeline.png) · [原始 PDF](assets/figures/pipeline.pdf)。*
+*论文 Figure 1 概念示意图。[原始高清图片](assets/figures/concept-overview.jpg)。图中的 Utility 按下文定义衡量任务所需信息的披露覆盖率。*
 
 1. **明确披露边界。** 合成源文档包含任务所需、受保护及其他属性，任务与隐私政策共同定义选择性披露场景。
 2. **测试对抗交互。** Model A 是被评测的可信模型，Model B 扮演外部攻击者；五类政策表述与五类对话攻击组合覆盖十个领域。
@@ -46,6 +46,8 @@ ETH Zurich · ETH AI Center<br>
 **Privacy** 衡量受保护属性未被披露的比例；**Attribute Utility** 衡量任务所需属性被披露的比例，**不等同于端到端任务完成率**。两者均越高越好。政策与攻击是不同类型，不代表已经验证的单调难度等级。
 
 [查看领域覆盖、政策与攻击定义、数据分布 →](docs/benchmark.md)
+
+[查看详细构建流程图 →](docs/pipeline.md#pipeline-overview)
 
 ## 主要结果
 
