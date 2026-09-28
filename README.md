@@ -89,11 +89,13 @@ hf download Qiaoyuan/POLAR-Bench \
 
 Configure an OpenAI-compatible endpoint serving the trusted model and external
 attacker. Replace the placeholders below with your available model IDs and
-endpoint. `ANonymous_SERVING_API` is the existing case-sensitive environment
-variable used by the released evaluator; it is not an authorship label.
+endpoint. `POLAR_API_KEY` is the access key for that service; `POLAR_BASE_URL`
+is its OpenAI-compatible API URL. For the Swiss AI Platform used in our
+experiments, the URL is `https://api.swissai.svc.cscs.ch/v1`. Other compatible
+services can also be used. Both model IDs must be available at the chosen endpoint.
 
 ```bash
-export ANonymous_SERVING_API="YOUR_API_KEY"
+export POLAR_API_KEY="YOUR_API_KEY"
 export POLAR_BASE_URL="https://YOUR_ENDPOINT/v1"
 export POLAR_MODEL_A="YOUR_TRUSTED_MODEL_ID"
 export POLAR_MODEL_B="meta-llama/Llama-3.3-70B-Instruct"
@@ -109,10 +111,10 @@ python scripts/ab_eval.py \
   --output results/smoke_summary.json \
   --output-details results/smoke_details.json \
   --checkpoint results/smoke_checkpoint.json \
-  --Anonymous-base-url "${POLAR_BASE_URL}" \
+  --base-url "${POLAR_BASE_URL}" \
   --model-b "${POLAR_MODEL_B}" \
   --max-workers 5 \
-  --model-a-provider Anonymous \
+  --model-a-provider openai-compatible \
   --defense none
 ```
 
@@ -220,10 +222,10 @@ python scripts/ab_eval.py \
   --output results/ab_eval_results.json \
   --output-details results/ab_eval_results_detailed.json \
   --checkpoint results/ab_eval_results_detailed.json.checkpoint.json \
-  --Anonymous-base-url https://examples.com \
+  --base-url "${POLAR_BASE_URL}" \
   --model-b meta-llama/Llama-3.3-70B-Instruct \
   --max-workers 5 \
-  --model-a-provider Anonymous \
+  --model-a-provider openai-compatible \
   --defense none
 
 # 6. Convert result JSON files to CSV (need set file path)
@@ -278,9 +280,11 @@ Generated outputs are typically written to `outputs/` or `results/`.
 Benchmark records are synthetically generated. Realistic names and personal
 details are fictional scenario content, not information about the authors.
 
-Legacy provider identifiers such as `Anonymous` and `--Anonymous-base-url`
-remain in the code for compatibility with existing evaluation commands. They
-are API configuration names, not an indication that the project is anonymous.
+The evaluator uses `POLAR_API_KEY`, `POLAR_BASE_URL` / `--base-url`, and the
+`openai-compatible` provider name. The optional rendering, verification, and
+repair tools also accept `POLAR_API_KEY` and `POLAR_BASE_URL`. Pre-release
+command aliases and checkpoint configurations remain supported for resuming
+existing runs; new results use the current names.
 
 ## Troubleshooting
 

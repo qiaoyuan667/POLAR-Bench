@@ -62,21 +62,21 @@ def get_run_config(
 
 
 # =========================================================
-# anonymous platform client
+# OpenAI-compatible platform client
 # =========================================================
 
 _client: Optional[OpenAI] = None
 
 
 def build_client() -> OpenAI:
-    api_key = os.getenv("LLM_API_KEY")
-    base_url = os.getenv("LLM_BASE_URL")
+    api_key = os.getenv("POLAR_API_KEY") or os.getenv("LLM_API_KEY")
+    base_url = os.getenv("POLAR_BASE_URL") or os.getenv("LLM_BASE_URL")
 
     if not api_key:
-        raise EnvironmentError("Missing LLM_API_KEY environment variable.")
+        raise EnvironmentError("Missing POLAR_API_KEY environment variable.")
 
     if not base_url:
-        raise EnvironmentError("Missing LLM_BASE_URL environment variable.")
+        raise EnvironmentError("Missing POLAR_BASE_URL environment variable.")
 
     return OpenAI(
         api_key=api_key,

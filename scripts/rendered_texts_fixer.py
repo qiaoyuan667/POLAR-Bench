@@ -19,21 +19,23 @@ from openai import OpenAI
 
 
 # =========================================================
-# Anonymous platform client
+# OpenAI-compatible platform client
 # =========================================================
 
 _client: Optional[OpenAI] = None
 
 
 def build_client() -> OpenAI:
-    api_key = os.getenv("ANONYMOUS_PLATFORM_API_KEY")
-    base_url = os.getenv("ANONYMOUS_PLATFORM_BASE_URL")
+    api_key = (os.getenv("POLAR_API_KEY") or os.getenv("LLM_API_KEY")
+               or os.getenv("ANONYMOUS_PLATFORM_API_KEY"))
+    base_url = (os.getenv("POLAR_BASE_URL") or os.getenv("LLM_BASE_URL")
+                or os.getenv("ANONYMOUS_PLATFORM_BASE_URL"))
 
     if not api_key:
-        raise EnvironmentError("Missing ANONYMOUS_PLATFORM_API_KEY environment variable.")
+        raise EnvironmentError("Missing POLAR_API_KEY environment variable.")
 
     if not base_url:
-        raise EnvironmentError("Missing ANONYMOUS_PLATFORM_BASE_URL environment variable.")
+        raise EnvironmentError("Missing POLAR_BASE_URL environment variable.")
 
     return OpenAI(
         api_key=api_key,
@@ -1201,7 +1203,7 @@ def repair_dataset(
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Repair invalid generated fields using anonymous LLM."
+        description="Repair invalid generated fields using an OpenAI-compatible LLM endpoint."
     )
 
     parser.add_argument(

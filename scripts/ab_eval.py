@@ -901,8 +901,8 @@ def is_usable_example(example: Dict[str, Any]) -> Tuple[bool, str]:
 # Clients
 # =========================================================
 
-class AnonymousClient:
-    def __init__(self, api_key: str, base_url: str = "https://examples.com"):
+class OpenAICompatibleClient:
+    def __init__(self, api_key: str, base_url: str):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
 
     def chat(
@@ -939,7 +939,7 @@ class AnonymousClient:
                 last_err = e
                 time.sleep(1.5 * (attempt + 1))
 
-        raise RuntimeError(f"Anonymous request failed after {retries} retries: {last_err}")
+        raise RuntimeError(f"OpenAI-compatible request failed after {retries} retries: {last_err}")
 
 class OpenAIModelAClient:
     """
@@ -1131,8 +1131,8 @@ class ClaudeModelAClient:
 
         raise RuntimeError(f"Claude request failed after {retries} retries: {last_err}")
 
-class AnonymousModelBClient:
-    def __init__(self, api_key: str, base_url: str = "https://examples.com"):
+class OpenAICompatibleModelBClient:
+    def __init__(self, api_key: str, base_url: str):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
 
     def chat(
@@ -1173,7 +1173,7 @@ class AnonymousModelBClient:
                 last_err = e
                 time.sleep(1.5 * (attempt + 1))
 
-        raise RuntimeError(f"Anonymous model B request failed after {retries} retries: {last_err}")
+        raise RuntimeError(f"OpenAI-compatible model B request failed after {retries} retries: {last_err}")
 
 
 # =========================================================
@@ -1414,8 +1414,8 @@ def extract_attack_turn_budget(example: Dict[str, Any], fallback: int) -> int:
 def simulate_attack_dialog(
     example: Dict[str, Any],
     model_a_name: str,
-    anonymous_client: Any,
-    model_b_client: AnonymousModelBClient,
+    compatible_client: Any,
+    model_b_client: OpenAICompatibleModelBClient,
     model_b_name: str = "meta-llama/Llama-3.3-70B-Instruct",
     max_rounds: int = 6,
     base_seed: int = DEFAULT_SEED,
@@ -1468,7 +1468,7 @@ def simulate_attack_dialog(
                 base_seed=base_seed,
             )
 
-            a_reply = anonymous_client.chat(
+            a_reply = compatible_client.chat(
                 model=model_a_name,
                 messages=build_a_messages_from_transcript(a_system, transcript),
                 max_tokens=1200,
@@ -1533,7 +1533,7 @@ def simulate_attack_dialog(
                 base_seed=base_seed,
             )
 
-            a_msg = anonymous_client.chat(
+            a_msg = compatible_client.chat(
                 model=model_a_name,
                 messages=build_a_messages_from_transcript(a_system, transcript),
                 max_tokens=1200,
@@ -1591,7 +1591,7 @@ def simulate_attack_dialog(
             base_seed=base_seed,
         )
 
-        a_msg = anonymous_client.chat(
+        a_msg = compatible_client.chat(
             model=model_a_name,
             messages=build_a_messages_from_transcript(a_system, transcript),
             max_tokens=1200,
@@ -1953,16 +1953,38 @@ def privacychecker_rewrite(
 # Checkpoint helpers
 # =========================================================
 
+def normalize_provider(provider: str) -> str:
+    """Accept the pre-release provider name without exposing it in new outputs."""
+    return "openai-compatible" if provider == "Anonymous" else provider
+
+
+def normalize_run_config(config: Dict[str, Any]) -> Dict[str, Any]:
+    config = dict(config)
+    for legacy, current in (("Anonymous_models", "model_a_names"),
+                            ("Anonymous_base_url", "base_url")):
+        if legacy in config:
+            config.setdefault(current, config.pop(legacy))
+    if "model_a_provider" in config:
+        config["model_a_provider"] = normalize_provider(config["model_a_provider"])
+    return config
+
+
+def get_compatible_api_key() -> Optional[str]:
+    return (os.environ.get("POLAR_API_KEY")
+            or os.environ.get("CSCS_SERVING_API")
+            or os.environ.get("ANonymous_SERVING_API"))
+
+
 def build_run_config(
     dataset_path: str,
-    Anonymous_models: List[str],
+    model_a_names: List[str],
     domains: List[str],
     samples_per_domain: int,
     max_rounds: int,
     seed: int,
     output_path: str,
     output_details_path: str,
-    Anonymous_base_url: str,
+    base_url: str,
     model_b_name: str,
     model_a_provider: str,
     max_workers: int,
@@ -1971,16 +1993,16 @@ def build_run_config(
 ) -> Dict[str, Any]:
     return {
         "dataset_path": dataset_path,
-        "Anonymous_models": Anonymous_models,
+        "model_a_names": model_a_names,
         "domains": domains,
         "samples_per_domain": samples_per_domain,
         "max_rounds": max_rounds,
         "seed": seed,
         "output_path": output_path,
         "output_details_path": output_details_path,
-        "Anonymous_base_url": Anonymous_base_url,
+        "base_url": base_url,
         "model_b_name": model_b_name,
-        "model_a_provider": model_a_provider,
+        "model_a_provider": normalize_provider(model_a_provider),
         "max_workers": max_workers,
         "deterministic_llm": deterministic_llm,
         "temperature": 0.0,
@@ -2001,12 +2023,12 @@ def make_initial_summary_results(
     return {
         "config": {
             "dataset_path": config_for_output["dataset_path"],
-            "Anonymous_models": config_for_output["Anonymous_models"],
+            "model_a_names": config_for_output["model_a_names"],
             "domains": config_for_output["domains"],
             "samples_per_domain": config_for_output["samples_per_domain"],
             "max_rounds": config_for_output["max_rounds"],
             "seed": config_for_output["seed"],
-            "Anonymous_base_url": config_for_output["Anonymous_base_url"],
+            "base_url": config_for_output["base_url"],
             "model_b_name": config_for_output["model_b_name"],
             "defense": config_for_output.get("defense", "none"),
         },
@@ -2031,12 +2053,12 @@ def make_initial_detail_results(
     return {
         "config": {
             "dataset_path": config_for_output["dataset_path"],
-            "Anonymous_models": config_for_output["Anonymous_models"],
+            "model_a_names": config_for_output["model_a_names"],
             "domains": config_for_output["domains"],
             "samples_per_domain": config_for_output["samples_per_domain"],
             "max_rounds": config_for_output["max_rounds"],
             "seed": config_for_output["seed"],
-            "Anonymous_base_url": config_for_output["Anonymous_base_url"],
+            "base_url": config_for_output["base_url"],
             "model_b_name": config_for_output["model_b_name"],
             "defense": config_for_output.get("defense", "none"),
         },
@@ -2078,21 +2100,22 @@ def make_initial_checkpoint(
                 "results": [],
                 "done": False,
             }
-            for model_name in run_config["Anonymous_models"]
+            for model_name in run_config["model_a_names"]
         },
     }
 
 
 def validate_checkpoint_config(checkpoint: Dict[str, Any], run_config: Dict[str, Any]) -> None:
-    old_cfg = checkpoint.get("config", {}) or {}
+    old_cfg = normalize_run_config(checkpoint.get("config", {}) or {})
+    run_config = normalize_run_config(run_config)
     compare_keys = [
         "dataset_path",
-        "Anonymous_models",
+        "model_a_names",
         "domains",
         "samples_per_domain",
         "max_rounds",
         "seed",
-        "Anonymous_base_url",
+        "base_url",
         "model_b_name",
         "model_a_provider",
         "max_workers",
@@ -2152,7 +2175,7 @@ def save_all_state(
 
 def evaluate(
     dataset_path: str,
-    Anonymous_models: List[str],
+    model_a_names: List[str],
     domains: List[str],
     samples_per_domain: int,
     max_rounds: int,
@@ -2160,20 +2183,21 @@ def evaluate(
     output_path: str,
     output_details_path: str,
     checkpoint_path: str,
-    Anonymous_base_url: str,
+    base_url: str,
     model_b_name: str,
     model_a_provider: str,
     max_workers: int = 1,
     deterministic_llm: bool = True,
     defense: str = "none",
 ) -> None:
-    anonymous_api_key = os.environ.get("ANonymous_SERVING_API")
+    compatible_api_key = get_compatible_api_key()
+    model_a_provider = normalize_provider(model_a_provider)
     openai_api_key = os.environ.get("OPENAI_API_KEY")
     gemini_api_key = os.environ.get("GEMINI_API_KEY")
     anthropic_api_key = os.environ.get("ANTHROPIC_API_KEY")
 
-    if not anonymous_api_key:
-        raise RuntimeError("Missing environment variable: ANonymous_SERVING_API")
+    if not compatible_api_key:
+        raise RuntimeError("Missing POLAR_API_KEY for the OpenAI-compatible model endpoint.")
     
     if model_a_provider == "openai" and not openai_api_key:
         raise RuntimeError("Missing environment variable: OPENAI_API_KEY")
@@ -2186,14 +2210,14 @@ def evaluate(
 
     run_config = build_run_config(
         dataset_path=dataset_path,
-        Anonymous_models=Anonymous_models,
+        model_a_names=model_a_names,
         domains=domains,
         samples_per_domain=samples_per_domain,
         max_rounds=max_rounds,
         seed=seed,
         output_path=output_path,
         output_details_path=output_details_path,
-        Anonymous_base_url=Anonymous_base_url,
+        base_url=base_url,
         model_b_name=model_b_name,
         model_a_provider=model_a_provider,
         max_workers=max_workers,
@@ -2233,6 +2257,7 @@ def evaluate(
     if os.path.exists(checkpoint_path):
         checkpoint_data = load_json_or_default(checkpoint_path, {})
         validate_checkpoint_config(checkpoint_data, run_config)
+        checkpoint_data["config"] = normalize_run_config(checkpoint_data["config"])
         print(f"Loaded checkpoint: {checkpoint_path}")
     else:
         checkpoint_data = make_initial_checkpoint(run_config, selected)
@@ -2253,9 +2278,9 @@ def evaluate(
         detail_results=detail_results,
     )
 
-    anonymous_client = AnonymousClient(
-        api_key=anonymous_api_key,
-        base_url=Anonymous_base_url,
+    compatible_client = OpenAICompatibleClient(
+        api_key=compatible_api_key,
+        base_url=base_url,
     )
 
     openai_model_a_client = None
@@ -2270,14 +2295,14 @@ def evaluate(
     if model_a_provider == "claude":
         claude_model_a_client = ClaudeModelAClient(api_key=anthropic_api_key)
 
-    model_b_client = AnonymousModelBClient(
-        api_key=anonymous_api_key,
-        base_url=Anonymous_base_url,
+    model_b_client = OpenAICompatibleModelBClient(
+        api_key=compatible_api_key,
+        base_url=base_url,
     )
 
     total_examples = len(selected)
 
-    for model_a in Anonymous_models:
+    for model_a in model_a_names:
         print(f"\n=== Evaluating model A: {model_a} ===")
 
         model_state = checkpoint_data["models"].setdefault(model_a, {
@@ -2304,19 +2329,19 @@ def evaluate(
             elif model_a_provider == "claude":
                 model_a_client = claude_model_a_client
             else:
-                model_a_client = anonymous_client
+                model_a_client = compatible_client
 
             transcript = simulate_attack_dialog(
                 example=ex,
                 model_a_name=model_a,
-                anonymous_client=model_a_client,
+                compatible_client=model_a_client,
                 model_b_client=model_b_client,
                 model_b_name=model_b_name,
                 max_rounds=max_rounds,
                 base_seed=seed,
                 deterministic_llm=deterministic_llm,
                 defense=defense,
-                defense_client=anonymous_client,
+                defense_client=compatible_client,
                 defense_model=model_b_name,
             )
 
@@ -2431,7 +2456,7 @@ def evaluate(
 # CLI
 # =========================================================
 
-def parse_args():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="A/B privacy delegation benchmark evaluator")
 
     parser.add_argument(
@@ -2443,13 +2468,13 @@ def parse_args():
         "--model-a",
         nargs="+",
         required=True,
-        help="Anonymous model names used as model A",
+        help="Trusted model IDs used as model A",
     )
     parser.add_argument(
         "--domains",
         nargs="+",
         required=True,
-        help="Domains to evaluate, typically exactly 2",
+        help="Domains to evaluate; list all 10 domains for the full benchmark",
     )
     parser.add_argument(
         "--samples-per-domain",
@@ -2485,14 +2510,18 @@ def parse_args():
         help="Checkpoint JSON path for resume. Default: <output-details>.checkpoint.json",
     )
     parser.add_argument(
-        "--Anonymous-base-url",
-        default="https://examples.com",
-        help="Anonymous OpenAI-compatible base URL",
+        "--base-url",
+        default=os.environ.get("POLAR_BASE_URL"),
+        help="OpenAI-compatible model endpoint (or set POLAR_BASE_URL)",
+    )
+    parser.add_argument(
+        "--Anonymous-base-url", dest="base_url",
+        default=argparse.SUPPRESS, help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--model-b",
         default="meta-llama/Llama-3.3-70B-Instruct",
-        help="Anonymous attacker model name",
+        help="External attacker model ID served at --base-url",
     )
     parser.add_argument(
         "--max-workers",
@@ -2502,9 +2531,10 @@ def parse_args():
     )
     parser.add_argument(
         "--model-a-provider",
-        choices=["Anonymous", "openai", "gemini", "claude"],
-        default="Anonymous",
-        help="Provider for model A. Model B remains Anonymous.",
+        type=normalize_provider,
+        choices=["openai-compatible", "openai", "gemini", "claude"],
+        default="openai-compatible",
+        help="Provider for model A. Model B uses the OpenAI-compatible endpoint.",
     )
     parser.add_argument(
         "--no-deterministic-llm",
@@ -2517,7 +2547,10 @@ def parse_args():
         default="none",
         help="Optional inference-time privacy defense applied on top of Model A.",
     )
-    return parser.parse_args()
+    args = parser.parse_args(argv)
+    if not args.base_url:
+        parser.error("Set --base-url or POLAR_BASE_URL to your model endpoint.")
+    return args
 
 
 if __name__ == "__main__":
@@ -2529,7 +2562,7 @@ if __name__ == "__main__":
 
     evaluate(
         dataset_path=args.dataset,
-        Anonymous_models=args.model_a,
+        model_a_names=args.model_a,
         domains=args.domains,
         samples_per_domain=args.samples_per_domain,
         max_rounds=args.max_rounds,
@@ -2537,7 +2570,7 @@ if __name__ == "__main__":
         output_path=args.output,
         output_details_path=args.output_details,
         checkpoint_path=checkpoint_path,
-        Anonymous_base_url=args.Anonymous_base_url,
+        base_url=args.base_url,
         model_b_name=args.model_b,
         model_a_provider=args.model_a_provider,
         max_workers=args.max_workers,

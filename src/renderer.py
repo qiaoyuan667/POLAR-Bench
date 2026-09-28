@@ -36,19 +36,19 @@ _client: Optional[OpenAI] = None
 
 
 def build_client() -> OpenAI:
-    api_key = os.getenv("LLM_API_KEY")
-    base_url = os.getenv("LLM_BASE_URL")
+    api_key = os.getenv("POLAR_API_KEY") or os.getenv("LLM_API_KEY")
+    base_url = os.getenv("POLAR_BASE_URL") or os.getenv("LLM_BASE_URL")
 
     if not api_key:
-        raise EnvironmentError("Missing LLM_API_KEY environment variable.")
+        raise EnvironmentError("Missing POLAR_API_KEY environment variable.")
 
     if not base_url:
-        raise EnvironmentError("Missing LLM_BASE_URL environment variable.")
+        raise EnvironmentError("Missing POLAR_BASE_URL environment variable.")
 
-    if "your-anonymous-endpoint" in base_url:
+    if any(marker in base_url.lower() for marker in ("your_endpoint", "your-anonymous-endpoint")):
         raise EnvironmentError(
-            "LLM_BASE_URL is still using the placeholder value. "
-            "Replace it with the real endpoint, e.g. https://anonymous-endpoint-example.com"
+            "POLAR_BASE_URL is still using a placeholder. "
+            "Replace it with your service's OpenAI-compatible API URL."
         )
 
     return OpenAI(
@@ -222,7 +222,7 @@ def call_llm(
         # OpenAI-style seed; some OpenAI-compatible servers may honor this.
         kwargs["seed"] = seed
 
-        # SGLang-style seed. Depending on the anonymous proxy,
+        # SGLang-style seed. Depending on the serving proxy,
         # one of these may be accepted, ignored, or rejected.
         kwargs["extra_body"] = {
             "sampling_seed": seed,
@@ -502,7 +502,7 @@ def render_one_record(
         "generation_meta": {
             "model": model,
             "reasoning_effort": reasoning_effort,
-            "provider": "anonymous-provider",
+            "provider": "openai-compatible",
             "used_fallback": False,
             "fallback_reasons": {},
             "source_document_word_count": None,
@@ -612,7 +612,7 @@ def build_error_record(
         "generation_meta": {
             "model": model,
             "reasoning_effort": reasoning_effort,
-            "provider": "anonymous-provider",
+            "provider": "openai-compatible",
             "used_fallback": True,
             "fallback_reasons": {"record_level_error": str(error)},
             "error": str(error),
